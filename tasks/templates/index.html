@@ -6,15 +6,17 @@
     <meta charset="UTF-8">
     <script src="{% static 'angularjs/angular.min.js' %}"></script>
     <script src="{% static 'angularjs/angular-cookies.min.js' %}"></script>
-    <script src="{% static 'angularjs/angular-route.min.js' %}"></script>
-
+{#    <script src="{% static 'angularjs/angular-route.min.js' %}"></script>#}
+    <script src="http://unpkg.com/angular-ui-router/release/angular-ui-router.min.js"></script>
     <script src="{% static 'apps.js' %}"></script>
+
     {#    <script src="{% static 'appRoutes.js' %}"></script>#}
 </head>
 <body ng-app="todoApp">
 
 
 <div ng-view>
+    <ui-view></ui-view>
 </div>
 
 </body>

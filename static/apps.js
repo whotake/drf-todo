@@ -1,6 +1,7 @@
 var todoApp = angular.module('todoApp', [
-    'ngRoute',
-    'ngCookies'
+    // 'ngRoute',
+    'ngCookies',
+    'ui.router'
 ]);
 
 todoApp.factory('tokenInterceptor', function ($cookies) {
@@ -20,11 +21,11 @@ todoApp.factory('tokenInterceptor', function ($cookies) {
 });
 
 todoApp.config(function ($httpProvider) {
-    // $httpProvider.defaults.xsrfCookieName = 'csrftoken';
-    // $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
-    $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
+    $httpProvider.defaults.xsrfCookieName = 'csrftoken';
+    $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
     $httpProvider.interceptors.push('tokenInterceptor');
 });
+
 
 todoApp.controller('TaskController',
     function TaskController($scope, $http) {
@@ -49,11 +50,9 @@ todoApp.controller('LoginController',
             $http({
                 method: 'POST',
                 url: '/api-token-auth/',
-                params: $scope.user
+                data: $scope.user
             }).then(function successCallback(response) {
-                console.log(response);
-                console.log(user);
-                $scope.token = response["token"];
+                $scope.token = response.data['token'];
                 document.cookie = 'token=' + $scope.token + ";path=/";
                 // location.href = "/";
             });
@@ -62,20 +61,46 @@ todoApp.controller('LoginController',
     });
 
 
-angular.module('todoApp').config(['$routeProvider',
-    function config($routeProvider) {
-        $routeProvider.when('/', {
-            templateUrl: '/static/templates/login.html',
-            controller: 'LoginController'
-        }).when('/login/', {
-            templateUrl: '/static/templates/login.html',
-            controller: 'LoginController'
-        // $routeProvider.when('/', {
-        //     templateUrl: '/static/templates/index.html',
-        //     controller: 'TaskController'
-        // }).when('/login/', {
-        //     templateUrl: '/static/templates/login.html',
-        //     controller: 'LoginController'
-        }).otherwise('/api/tasks/');
-    }
-]);
+// // angular.module('todoApp').config(['$routeProvider',
+// //     function config($routeProvider) {
+// // $routeProvider.when('/', {
+// //     templateUrl: '/static/templates/login.html',
+// //     controller: 'LoginController'
+// // }).when('/login/', {
+// //     templateUrl: '/static/templates/login.html',
+// //     controller: 'LoginController'
+// todoApp.config(function ($routeProvider, $locationProvider) {
+//     $routeProvider
+//         .when('/tasks', {
+//             templateUrl: '/static/templates/index.html',
+//             controller: 'TaskController'
+//         })
+//         .when('/login', {
+//             templateUrl: '/static/templates/login.html',
+//             controller: 'LoginController'
+//         });
+//     $locationProvider.html5Mode(true);
+//
+// });
+// // // ])
+
+todoApp.config(function ($stateProvider, $locationProvider) {
+    var tasksState = {
+        name: 'tasks',
+        url: '/',
+        template: '/static/templates/login.html',
+        controller: 'TaskController'
+    };
+
+    var loginState = {
+        name: 'login',
+        url: '/login',
+        template: '/static/templates/login.html',
+        controller: 'LoginController'
+    };
+
+    $stateProvider.state(tasksState);
+    $stateProvider.state(loginState);
+    $locationProvider.html5Mode(true);
+});
+
