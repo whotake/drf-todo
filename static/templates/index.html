@@ -1,8 +1,12 @@
 <div ng-controller="TaskController">
-    <ul>
-        <li ng-repeat="task in tasks">
-            <h1>Задача: {{ task.text }}</h1>
-            <h2 ng-if="task.is_completed==0">Не выполнена</h2>
-        </li>
-    </ul>
+    <h2 class="text-center">Tasks page</h2>
+    <div ng-repeat="task in tasks">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <h3>{{ task.text }}</h3>
+                <h3 ng-if="task.is_completed==0">Status: <span class="glyphicon glyphicon-remove"
+                                                               aria-hidden="true"></span></h3>
+            </div>
+        </div>
+    </div>
 </div>
