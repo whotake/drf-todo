@@ -1,0 +1,13 @@
+<div ng-controller="NewTaskController">
+    <div class="col-md-6 col-md-offset-3">
+        <h2 class="text-center">Crate a new task</h2>
+        <form>
+            <div class="form-group">
+                <label for="exampleInputPassword1">Task text</label>
+                <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Task text"
+                       ng-model="task.text" required>
+            </div>
+            <button type="submit" class="btn btn-default" ng-click="createTask()">Create</button>
+        </form>
+    </div>
+</div>

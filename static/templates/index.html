@@ -6,7 +6,13 @@
                 <h3>{{ task.text }}</h3>
                 <h3 ng-if="task.is_completed==0">Status: <span class="glyphicon glyphicon-remove"
                                                                aria-hidden="true"></span></h3>
+                <button type="submit" class="btn btn-default" ng-click="deleteTask(task.id)">Delete</button>
+                <button type="submit" class="btn btn-default" ng-click="completeTask(task.id, task.text)">Mark as
+                    completed
+                </button>
             </div>
         </div>
     </div>
+    <h3><a href="/#!/task/new">Create a new task</a></h3>
+
 </div>

@@ -36,6 +36,29 @@ todoApp.controller('TaskController',
             $scope.tasks = response.data;
             console.log($scope.tasks)
         });
+
+        $scope.deleteTask = function (id) {
+            $http({
+                method: 'DELETE',
+                url: '/api/tasks/' + id + '/'
+            }).then(function successCallback() {
+                window.location.reload();
+            });
+        };
+
+        $scope.completeTask = function (id) {
+            $scope.status = {
+                'is_completed': true
+            };
+
+            $http({
+                method: 'PATCH',
+                url: '/api/tasks/' + id + '/',
+                data: $scope.status
+            }).then(function successCallback() {
+                window.location.reload();
+            });
+        }
     });
 
 todoApp.controller('LoginController',
@@ -64,6 +87,43 @@ todoApp.controller('LoginController',
 
     });
 
+todoApp.controller('RegisterController',
+    function RegisterController($scope, $http, $window) {
+        $scope.user = {
+            'username': $scope.username,
+            'email': $scope.email,
+            'password': $scope.password
+        };
+
+        $scope.register = function () {
+            $http({
+                method: 'POST',
+                url: '/api/users/',
+                data: $scope.user
+            }).then(function successCallback(response) {
+                window.location.href = "/#!/login";
+            });
+        }
+
+    });
+
+todoApp.controller('NewTaskController',
+    function NewTaskController($scope, $http) {
+        $scope.task = {
+            'text': $scope.text
+        };
+
+        $scope.createTask = function () {
+            $http({
+                method: 'POST',
+                url: '/api/tasks/',
+                data: $scope.task
+            }).then(function successCallback() {
+                window.location.href = "/#!/";
+            });
+        }
+    });
+
 
 todoApp.config(function ($stateProvider, $locationProvider) {
     var tasksState = {
@@ -80,8 +140,24 @@ todoApp.config(function ($stateProvider, $locationProvider) {
         controller: 'LoginController'
     };
 
+    var registerState = {
+        name: 'register',
+        url: '/register',
+        templateUrl: '/static/templates/register.html',
+        controller: 'RegisterController'
+    };
+
+    var newTaskState = {
+        name: 'newTask',
+        url: '/task/new',
+        templateUrl: '/static/templates/create_task.html',
+        controller: 'NewTaskController'
+    };
+
     $stateProvider.state(tasksState);
     $stateProvider.state(loginState);
+    $stateProvider.state(registerState);
+    $stateProvider.state(newTaskState);
     $locationProvider.html5Mode(false).hashPrefix('!');
 });
 
