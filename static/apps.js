@@ -27,7 +27,7 @@ todoApp.config(function ($httpProvider) {
 
 
 todoApp.controller('TaskController',
-    function TaskController($scope, $http) {
+    function TaskController($scope, $http, $window) {
         $scope.tasks = null;
         $http({
             method: 'GET',
@@ -58,8 +58,16 @@ todoApp.controller('TaskController',
             }).then(function successCallback() {
                 window.location.reload();
             });
+        };
+
+        $scope.logout = function () {
+            if ($window.localStorage.getItem('token')) {
+                $window.localStorage.removeItem('token')
+            }
+            window.location.reload();
         }
     });
+
 
 todoApp.controller('LoginController',
     function LoginController($scope, $http, $window) {
@@ -153,6 +161,7 @@ todoApp.config(function ($stateProvider, $locationProvider) {
         templateUrl: '/static/templates/create_task.html',
         controller: 'NewTaskController'
     };
+
 
     $stateProvider.state(tasksState);
     $stateProvider.state(loginState);
